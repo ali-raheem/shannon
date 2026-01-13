@@ -1,6 +1,6 @@
 [package]
 name = "shannon"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 authors = ["Ali Raheem <github@shoryuken.com>"]
 description = "Visualize Shannon entropy of files"
