@@ -27,13 +27,25 @@ fn main() {
         println!("Width and Height must be atleast 32.");
         process::exit(1);
     }
-    let f = File::open(&args.input_file).expect("Could not open input file");
+    let f = match File::open(&args.input_file) {
+	Ok(f) => f,
+	Err(e) => {
+	    println!("Couldn't open file {} got error {e}.", args.input_file);
+	    process::exit(1);
+	},
+    };
     let mut reader = BufReader::new(f);
 
     let mut read_buffer = vec![0u8; args.block_size];
     let mut s = Vec::new();
     loop {
-        let len = reader.read(&mut read_buffer).expect("Could not read file");
+        let len = match reader.read(&mut read_buffer) {
+	    Ok(l) => l,
+	    Err(e) => {
+		println!("Unexpecedtly could not read from file {}, got error {e}", args.input_file);
+		process::exit(1);
+	    }
+	};
         if len == 0 {
             break;
         }
