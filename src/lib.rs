@@ -39,16 +39,6 @@ use num_traits::{Float, FromPrimitive};
 /// let e: f64 = entropy(text.as_bytes());
 /// assert_eq!(e, 1.0);
 /// ```
-///
-/// ## Calculating total entropy of a String
-///
-/// ```
-/// use shannon::entropy;
-///
-/// let text = String::from("AABB");
-/// let e = entropy::<f64>(text.as_bytes()) * (text.len() as f64);
-/// assert_eq!(e, 4.0);
-/// ```
 pub fn entropy<F: Float + FromPrimitive>(data: &[u8]) -> F {
     let data_len = F::from_usize(data.len()).unwrap();
     let mut counts = [0usize; 256];
@@ -65,7 +55,34 @@ pub fn entropy<F: Float + FromPrimitive>(data: &[u8]) -> F {
     }
     entropy
 }
-
+/// Calculates the total Shannon entropy of a byte slice.
+///
+/// Shannon entropy measures the average information content per byte,
+/// multiplied by the length this returns the total entropy of the byte slice.
+///
+/// # Arguments
+///
+/// * `data` - A byte slice to analyze
+///
+/// # Returns
+///
+/// The total entropy of data
+///
+/// # Example
+///
+/// ## Calculating total entropy of a String
+///
+/// ```
+/// use shannon::total_entropy;
+///
+/// let text = String::from("AABB");
+/// let e = total_entropy::<f64>(text.as_bytes());
+/// assert_eq!(e, 4.0);
+/// ```
+///
+pub fn total_entropy<F: Float + FromPrimitive>(data: &[u8]) -> F {
+    entropy::<F>(data) * (F::from_usize(data.len()).unwrap())
+}
 #[cfg(test)]
 mod test {
     use super::*;
