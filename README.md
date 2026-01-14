@@ -53,6 +53,7 @@ shannon <input_file> [OPTIONS]
 | `--width` | | 180 | Chart width in characters |
 | `--height` | | 100 | Chart height in characters |
 | `--y-max` | `-y` | auto | Maximum Y-axis value (defaults to max entropy found) |
+| `--no-plot` | `-n` | false | If set then no graph is plotted |
 
 ### Examples
 
@@ -72,6 +73,8 @@ shannon large_file.dat --width 80 --height 40
 ```
 
 ## Output
+
+A line summarizing the review is outputted.
 
 The tool renders a bar chart in the terminal where:
 - **X-axis**: Block index (position in file)
