@@ -3,7 +3,7 @@ Below is the output obtained when running `shannon ../TL-WR802Nv4_EU_2025-08-21_
 This tells us that the firmware is very likely encrypted with a strong encryption.
 
 # Example Output
-
+```bash
 Analysed ../TL-WR802Nv4_EU_2025-08-21_11.15.50.bin as 1985 chunks of length 4096, average entropy per byte was 6.7 bits.
 ⡁⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 8.0
 ⠄⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -26,3 +26,4 @@ DECIMAL       HEXADECIMAL      ENTROPY
 1212416       0x00128000       Falling entropy edge (0.000000)
 1445888       0x00161000       Rising entropy edge (0.994381)
 7176192       0x006D8000       Falling entropy edge (0.124828)
+```
