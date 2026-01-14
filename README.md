@@ -54,6 +54,7 @@ shannon <input_file> [OPTIONS]
 | `--height` | | 100 | Chart height in characters |
 | `--y-max` | `-y` | auto | Maximum Y-axis value (defaults to max entropy found) |
 | `--no-plot` | `-n` | false | If set then no graph is plotted |
+| `--quiet` | `-q` | false | If set then no summary is printed |
 
 ### Examples
 
