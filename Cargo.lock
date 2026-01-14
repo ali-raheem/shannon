@@ -197,8 +197,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "shannon"
-version = "0.1.2"
+name = "shannon-cli"
+version = "0.2.0"
 dependencies = [
  "clap",
  "num-traits",
