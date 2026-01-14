@@ -5,6 +5,95 @@
 
 use num_traits::{Float, FromPrimitive};
 
+/// Represents the type of entropy edge detected.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum EdgeType {
+    Rising,
+    Falling,
+}
+
+/// Represents a detected entropy edge in a sequence of entropy values.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct EntropyEdge<F> {
+    /// Block index where the edge was detected
+    pub block_index: usize,
+    /// Type of edge (rising or falling)
+    pub edge_type: EdgeType,
+    /// Normalized entropy value (0.0 to 1.0) at this edge
+    pub entropy: F,
+}
+
+/// Detects rising and falling edges in a sequence of entropy values.
+///
+/// Uses hysteresis to avoid spurious edge detection: a rising edge is only
+/// detected when entropy crosses above `high_threshold`, and a falling edge
+/// when it crosses below `low_threshold`.
+///
+/// # Arguments
+///
+/// * `entropy_values` - Slice of (block_index, entropy) tuples where entropy is in bits (0-8)
+/// * `high_threshold` - Normalized threshold (0.0-1.0) for detecting rising edges
+/// * `low_threshold` - Normalized threshold (0.0-1.0) for detecting falling edges
+///
+/// # Returns
+///
+/// A vector of detected entropy edges
+///
+/// # Example
+///
+/// ```
+/// use shannon::{detect_edges, EdgeType};
+///
+/// // Entropy values in bits (0-8): starts high, drops low
+/// let values = vec![(0, 7.8_f64), (1, 7.9), (2, 2.0), (3, 1.0)];
+/// let edges = detect_edges(&values, 0.95, 0.85);
+/// assert_eq!(edges.len(), 2);
+/// assert_eq!(edges[0].edge_type, EdgeType::Rising);
+/// assert_eq!(edges[0].block_index, 0);
+/// assert_eq!(edges[1].edge_type, EdgeType::Falling);
+/// assert_eq!(edges[1].block_index, 2);
+/// ```
+pub fn detect_edges<F: Float + FromPrimitive>(
+    entropy_values: &[(usize, F)],
+    high_threshold: F,
+    low_threshold: F,
+) -> Vec<EntropyEdge<F>> {
+    let eight = F::from_f64(8.0).unwrap();
+    let mut edges = Vec::new();
+    let mut last_edge: Option<bool> = None;
+    let mut trigger_reset = true;
+
+    for &(block_index, entropy) in entropy_values {
+        let normalized = entropy / eight;
+
+        if (matches!(last_edge, None | Some(false)) && normalized > low_threshold)
+            || (matches!(last_edge, Some(true)) && normalized < high_threshold)
+        {
+            trigger_reset = true;
+        }
+
+        if trigger_reset && normalized >= high_threshold {
+            edges.push(EntropyEdge {
+                block_index,
+                edge_type: EdgeType::Rising,
+                entropy: normalized,
+            });
+            last_edge = Some(true);
+            trigger_reset = false;
+        } else if trigger_reset && normalized <= low_threshold {
+            edges.push(EntropyEdge {
+                block_index,
+                edge_type: EdgeType::Falling,
+                entropy: normalized,
+            });
+            last_edge = Some(false);
+            trigger_reset = false;
+        }
+    }
+
+    edges
+}
+
 /// Calculates the Shannon entropy of a byte slice.
 ///
 /// Shannon entropy measures the average information content per byte,

@@ -1,6 +1,6 @@
 [package]
 name = "shannon-cli"
-version = "0.3.0"
+version = "0.5.0"
 edition = "2024"
 authors = ["Ali Raheem <github@shoryuken.com>"]
 description = "Visualize Shannon entropy of files"

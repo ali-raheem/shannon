@@ -5,7 +5,7 @@ use std::io::prelude::*;
 use std::process;
 use textplots::{Chart, Plot, Shape};
 
-use shannon::entropy;
+use shannon::{detect_edges, entropy, EdgeType};
 
 #[derive(Debug, Parser)]
 #[command(author, version, about, long_about = None)]
@@ -23,6 +23,12 @@ struct Args {
     no_plot: bool,
     #[clap(long, short, default_value_t = false)]
     quiet: bool,
+    #[clap(long, short = 'H', default_value_t = 0.95)]
+    high: f32,
+    #[clap(long, short = 'L', default_value_t = 0.85)]
+    low: f32,
+    #[clap(long, default_value_t = false)]
+    no_table: bool,
 }
 
 fn main() {
@@ -64,6 +70,8 @@ fn main() {
         .y_max
         .unwrap_or_else(|| s.iter().fold(0.0_f32, |a, &y| a.max(y)));
 
+    let indexed_s: Vec<(usize, f32)> = s.iter().copied().enumerate().collect();
+
     let s: Vec<(f32, f32)> = s
         .into_iter()
         .enumerate()
@@ -71,13 +79,38 @@ fn main() {
         .collect();
 
     if !args.quiet {
-	println!("Analysed {} as {} chunks of length {}, average entropy per byte was {s_avg:.1} bits.",
-		 args.input_file, s.len(), args.block_size);
+        println!(
+            "Analysed {} as {} chunks of length {}, average entropy per byte was {s_avg:.1} bits.",
+            args.input_file,
+            s.len(),
+            args.block_size
+        );
     }
-    
+
     if !args.no_plot {
-	Chart::new_with_y_range(args.width, args.height, 0.0, x_max, 0.0, y_max)
+        Chart::new_with_y_range(args.width, args.height, 0.0, x_max, 0.0, y_max)
             .lineplot(&Shape::Bars(&s))
             .display();
+    }
+
+    if !args.no_table {
+        let edges = detect_edges(&indexed_s, args.high, args.low);
+        if !edges.is_empty() {
+            println!("DECIMAL       HEXADECIMAL      ENTROPY");
+            println!(
+                "--------------------------------------------------------------------------------"
+            );
+            for edge in edges {
+                let offset = edge.block_index * args.block_size;
+                let label = match edge.edge_type {
+                    EdgeType::Rising => "Rising",
+                    EdgeType::Falling => "Falling",
+                };
+                println!(
+                    "{offset:<7}       {offset:#010X}       {label} entropy edge ({:.6})",
+                    edge.entropy
+                );
+            }
+        }
     }
 }
