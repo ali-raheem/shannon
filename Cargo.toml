@@ -1,6 +1,6 @@
 [package]
-name = "shannon"
-version = "0.1.2"
+name = "shannon-cli"
+version = "0.2.0"
 edition = "2024"
 authors = ["Ali Raheem <github@shoryuken.com>"]
 description = "Visualize Shannon entropy of files"
@@ -9,6 +9,14 @@ license = "MIT"
 readme = "README.md"
 keywords = ["entropy", "analysis", "security"]
 categories = ["command-line-utilities"]
+
+[[bin]]
+name = "shannon"
+path = "src/main.rs"
+
+[lib]
+name = "shannon"
+path = "src/lib.rs"
 
 [dependencies]
 clap = { version = "4.5.54", features = ["derive"] }
