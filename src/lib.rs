@@ -30,7 +30,7 @@ use num_traits::{Float, FromPrimitive};
 /// assert_eq!(e, 0.0);
 /// ```
 ///
-/// ## Calculating entropy of a String
+/// ## Calculating entropy per character of a String
 ///
 /// ```
 /// use shannon::entropy;
@@ -38,6 +38,16 @@ use num_traits::{Float, FromPrimitive};
 /// let text = String::from("AABB");
 /// let e: f64 = entropy(text.as_bytes());
 /// assert_eq!(e, 1.0);
+/// ```
+///
+/// ## Calculating total entropy of a String
+///
+/// ```
+/// use shannon::entropy;
+///
+/// let text = String::from("AABB");
+/// let e = entropy::<f64>(text.as_bytes()) * (text.len() as f64);
+/// assert_eq!(e, 4.0);
 /// ```
 pub fn entropy<F: Float + FromPrimitive>(data: &[u8]) -> F {
     let data_len = F::from_usize(data.len()).unwrap();
