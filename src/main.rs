@@ -19,6 +19,8 @@ struct Args {
     height: u32,
     #[clap(long, short)]
     y_max: Option<f32>,
+    #[clap(long, short, default_value_t = false)]
+    no_plot: bool,
 }
 
 fn main() {
@@ -54,6 +56,7 @@ fn main() {
         }
         s.push(entropy::<f32>(&read_buffer[..len]));
     }
+    let s_avg: f32 = s.iter().sum::<f32>() / (s.len() as f32);
     let x_max = s.len() as f32;
     let y_max = args
         .y_max
@@ -64,8 +67,13 @@ fn main() {
         .enumerate()
         .map(|(x, y)| (x as f32, y))
         .collect();
+    
+    println!("Analysed {} as {} chunks of length {}, average entropy per byte was {s_avg:.1} bits.",
+	      args.input_file, s.len(), args.block_size);
 
-    Chart::new_with_y_range(args.width, args.height, 0.0, x_max, 0.0, y_max)
-        .lineplot(&Shape::Bars(&s))
-        .display();
+    if !args.no_plot {
+	Chart::new_with_y_range(args.width, args.height, 0.0, x_max, 0.0, y_max)
+            .lineplot(&Shape::Bars(&s))
+            .display();
+    }
 }
