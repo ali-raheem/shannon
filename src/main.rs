@@ -28,11 +28,11 @@ fn main() {
         process::exit(1);
     }
     let f = match File::open(&args.input_file) {
-	Ok(f) => f,
-	Err(e) => {
-	    println!("Couldn't open file {} got error {e}.", args.input_file);
-	    process::exit(1);
-	},
+        Ok(f) => f,
+        Err(e) => {
+            println!("Couldn't open file {} got error {e}.", args.input_file);
+            process::exit(1);
+        }
     };
     let mut reader = BufReader::new(f);
 
@@ -40,12 +40,15 @@ fn main() {
     let mut s = Vec::new();
     loop {
         let len = match reader.read(&mut read_buffer) {
-	    Ok(l) => l,
-	    Err(e) => {
-		println!("Unexpecedtly could not read from file {}, got error {e}", args.input_file);
-		process::exit(1);
-	    }
-	};
+            Ok(l) => l,
+            Err(e) => {
+                println!(
+                    "Unexpecedtly could not read from file {}, got error {e}",
+                    args.input_file
+                );
+                process::exit(1);
+            }
+        };
         if len == 0 {
             break;
         }
