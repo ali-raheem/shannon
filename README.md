@@ -2,6 +2,8 @@
 
 A Rust CLI utility that calculates and visualizes block-wise Shannon entropy of files.
 
+Shannon is available on [crates.io](https://crates.io/crates/shannon-cli) and on [github](https://github.com/ali-raheem/shannon).
+
 ## What is Shannon Entropy?
 
 Shannon entropy measures the randomness or information density in data. Values range from 0 to 8 bits per byte:
@@ -22,6 +24,14 @@ Shannon entropy measures the randomness or information density in data. Values r
 ![Shannon entropy visualization](screenshot.png)
 
 ## Installation
+
+### Via crates.io
+
+```bash
+cargo add shannon-cli
+```
+
+### Local build
 
 ```bash
 cargo build --release
